@@ -35,7 +35,7 @@
         .detay-metin {
             font-size: 1.1rem;
             line-height: 1.8;
-            white-space: pre-wrap; /* Paragraf boşluklarını korur */
+            white-space: pre-wrap; 
         }
         .geri-btn {
             display: inline-block;
@@ -50,6 +50,23 @@
         .geri-btn:hover {
             background-color: #00e5ff;
             color: #121212;
+        }
+
+        /* --- MOBİL UYUMLULUK --- */
+        @media screen and (max-width: 768px) {
+            .detay-container {
+                margin: 2rem 1rem;
+                padding: 1.5rem;
+            }
+            .detay-baslik {
+                font-size: 1.8rem;
+            }
+            .detay-metin {
+                font-size: 1rem;
+            }
+            .detay-resim {
+                max-height: 250px;
+            }
         }
     </style>
 </head>

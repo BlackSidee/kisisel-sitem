@@ -321,3 +321,30 @@ document.getElementById('post-image-file').addEventListener('change', async (e) 
         urlInput.value = "";
     }
 });
+
+// Admin Paneli Mobil Menü İşlemleri
+const adminMenuToggle = document.getElementById('admin-menu-toggle');
+const adminSidebar = document.getElementById('admin-sidebar');
+const closeSidebarBtn = document.getElementById('close-sidebar');
+const sidebarMenuLi = document.querySelectorAll('.sidebar-menu li');
+
+if(adminMenuToggle && adminSidebar) {
+    // Menüyü aç
+    adminMenuToggle.addEventListener('click', () => {
+        adminSidebar.classList.add('active');
+    });
+
+    // Menüyü çarpıdan kapat
+    closeSidebarBtn.addEventListener('click', () => {
+        adminSidebar.classList.remove('active');
+    });
+
+    // Mobilde menüden bir sekmeye tıklayınca menüyü otomatik kapat
+    sidebarMenuLi.forEach(li => {
+        li.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                adminSidebar.classList.remove('active');
+            }
+        });
+    });
+}

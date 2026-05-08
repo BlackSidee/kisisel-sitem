@@ -5,31 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TahaDEV</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <!-- CSS Dosyamızı bağlıyoruz -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- Üst Menü (Navbar) -->
     <header>
         <nav>
             <a href="/" class="logo" style="text-decoration: none; display: flex; align-items: center;">
             <svg width="165" height="35" viewBox="0 0 165 35" xmlns="http://www.w3.org/2000/svg">
-                <!-- Sol Kod Parantezi: < -->
                 <text x="0" y="26" font-family="monospace" font-size="28" font-weight="bold" fill="#00e5ff">&lt;</text>
-        
-                <!-- Taha Kısmı (Beyazımsı Gri) -->
                 <text x="22" y="25" font-family="Arial, sans-serif" font-size="22" font-weight="900" fill="#e0e0e0" letter-spacing="1">Taha</text>
-        
-                <!-- DEV Kısmı (Neon Mavi) -->
                 <text x="76" y="25" font-family="Arial, sans-serif" font-size="22" font-weight="900" fill="#00e5ff" letter-spacing="1">DEV</text>
-        
-                <!-- Sağ Kod Parantezi: /> -->
                 <text x="130" y="26" font-family="monospace" font-size="28" font-weight="bold" fill="#00e5ff">/&gt;</text>
             </svg>
             </a>
-            <ul class="nav-links">
+            
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+
+            <ul class="nav-links" id="nav-links">
                 <li><a href="#hakkimda">Hakkımda</a></li>
                 <li><a href="#projeler">Projelerim</a></li>
                 <li><a href="#blog">Blog</a></li>
@@ -39,26 +35,22 @@
     </header>
 
     <main>
-        <!-- Karşılama Alanı (Hero Section) -->
         <section id="hakkimda" class="hero-section hidden">
             <h1>Merhaba, Ben Taha</h1>
             <h2>Bilgisayar Programcılığı Öğrencisi & Geliştirici</h2>
             <p>Web teknolojileri (Vue.js, Node.js), veritabanı yönetimi ve C# ile masaüstü uygulamaları geliştirme üzerine çalışıyorum. Hedefim mühendislik alanında kendimi daha da ileriye taşımak.</p>
         </section>
 
-        <!-- Projeler Alanı (İleride DB'den döngü ile gelecek kısım) -->
         <section id="projeler" class="hidden">
             <h2>Öne Çıkan Projelerim</h2>
             <div class="project-grid"></div>
         </section>
 
-        <!-- Blog Alanı (İleride DB'den çekilecek) -->
         <section id="blog" class="hidden">
             <h2>Son Yazılarım</h2>
             <div class="project-grid"></div>
         </section>
 
-        <!-- İletişim Formu Alanı -->
         <section id="iletisim" class="hidden">
             <h2>Bana Ulaşın</h2>
             <div class="contact-container">
@@ -81,12 +73,10 @@
         </section>
     </main>
 
-    <!-- En Alt Kısım (Footer) -->
     <footer>
         <p>&copy; 2026 Taha. Tüm hakları saklıdır.</p>
     </footer>
 
-    <!-- JavaScript Dosyamızı bağlıyoruz -->
     <script src="js/app.js"></script>
 </body>
 </html>

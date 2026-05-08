@@ -213,3 +213,49 @@ footer {
     background-color: rgba(26, 26, 26, 0.95);
     backdrop-filter: blur(5px);
 }
+
+/* --- MOBİL UYUMLULUK (RESPONSIVE) AYARLARI --- */
+.hamburger {
+    display: none;
+    font-size: 1.8rem;
+    color: #00e5ff;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    .hamburger {
+        display: block; /* Mobilde ikonu göster */
+    }
+    
+    .nav-links {
+        position: absolute;
+        top: 70px; /* Navbar yüksekliğine göre ayarlanabilir */
+        right: -100%; /* Ekran dışına sakla */
+        flex-direction: column;
+        background-color: #1a1a1a;
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 10px rgba(0,0,0,0.3);
+        padding: 2rem 0;
+        z-index: 999;
+    }
+
+    .nav-links.active {
+        right: 0; /* Butona basınca ekrana kaydır */
+    }
+
+    .nav-links li {
+        margin: 1.5rem 0;
+    }
+
+    /* Form ve genel kutuları mobilde daralt */
+    .contact-container, .hero-section {
+        width: 90%;
+        padding: 1.5rem;
+    }
+    
+    .project-grid {
+        grid-template-columns: 1fr; /* Mobilde kartları alt alta diz */
+    }
+}

@@ -194,3 +194,62 @@ select {
 .page-btn { background: transparent; border: 1px solid #00e5ff; color: #00e5ff; width: 40px; height: 40px; border-radius: 5px; cursor: pointer; transition: 0.3s; font-size: 1.2rem; }
 .page-btn:hover:not(:disabled) { background: #00e5ff; color: #121212; }
 .page-btn:disabled { border-color: #444; color: #444; cursor: not-allowed; }
+
+/* --- ADMİN MOBİL UYUMLULUK --- */
+@media screen and (max-width: 768px) {
+    /* Giriş Kutusu */
+    .login-box {
+        width: 90%;
+        padding: 2rem;
+    }
+
+    /* Admin paneli düzeni (yan yana yerine alt alta) */
+    #dashboard-section {
+        flex-direction: column;
+    }
+
+    /* Sol menüyü ekran dışına sakla */
+    .sidebar {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        height: 100vh;
+        width: 250px;
+        z-index: 1000;
+        transition: 0.3s;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+    }
+
+    /* JavaScript ile .active eklendiğinde menüyü göster */
+    .sidebar.active {
+        left: 0;
+    }
+
+    .sidebar-header {
+        justify-content: space-between;
+    }
+
+    /* Çarpı ikonunu göster */
+    .close-sidebar {
+        display: block !important;
+    }
+
+    /* Üst menü açma butonunu göster */
+    .mobile-admin-header {
+        display: flex !important;
+        align-items: center;
+        gap: 15px;
+        padding: 1rem;
+        background: #1a1a1a;
+        border-bottom: 1px solid #333;
+    }
+
+    /* İçerik alanının paddinglerini küçült */
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .section-title {
+        display: none; /* Üst barda yazdığı için gizle */
+    }
+}

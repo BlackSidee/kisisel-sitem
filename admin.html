@@ -8,10 +8,8 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/admin.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Admin sayfasına özel CSS -->
   </head>
   <body class="admin-body">
-    <!-- Giriş Ekranı (Login) -->
     <div class="login-container" id="login-section">
       <div class="login-box">
         <h2>Admin Paneli</h2>
@@ -24,46 +22,31 @@
                 <label for="password">Şifre</label>
                 <input type="password" id="password" required>
           </div>
-                
-                <!-- BENİ HATIRLA CHECKBOX'I BURAYA EKLENECEK -->
             <div class="form-group remember-me-container" style="display: flex; align-items: center; justify-content: flex-start; gap: 10px; margin-bottom: 1.5rem;">
                 <input type="checkbox" id="remember-me" style="width: auto; margin: 0; cursor: pointer;">
                 <label for="remember-me" style="margin: 0; font-size: 0.9rem; color: #aaa; cursor: pointer;">Beni Hatırla</label>
             </div>
-
             <button type="submit" class="submit-btn">Giriş Yap</button>
         </form>
-        <p
-          id="login-message"
-          style="color: #ff3333; margin-top: 1rem; text-align: center"
-        ></p>
+        <p id="login-message" style="color: #ff3333; margin-top: 1rem; text-align: center"></p>
       </div>
     </div>
 
-    <!-- Admin Kontrol Paneli (SPA Menülü Yeni Tasarım) -->
     <div id="dashboard-section" style="display: none;">
         
-        <!-- SOL MENÜ -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="admin-sidebar">
             <div class="sidebar-header">
                 <h2>
                     <a href="/" class="logo" style="text-decoration: none; display: flex; align-items: center;">
                     <svg width="165" height="35" viewBox="0 0 165 35" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Sol Kod Parantezi: < -->
                     <text x="0" y="26" font-family="monospace" font-size="28" font-weight="bold" fill="#00e5ff">&lt;</text>
-        
-                    <!-- Taha Kısmı (Beyazımsı Gri) -->
                     <text x="22" y="25" font-family="Arial, sans-serif" font-size="22" font-weight="900" fill="#e0e0e0" letter-spacing="1">Taha</text>
-        
-                    <!-- DEV Kısmı (Neon Mavi) -->
                     <text x="76" y="25" font-family="Arial, sans-serif" font-size="22" font-weight="900" fill="#00e5ff" letter-spacing="1">DEV</text>
-        
-                    <!-- Sağ Kod Parantezi: /> -->
                     <text x="130" y="26" font-family="monospace" font-size="28" font-weight="bold" fill="#00e5ff">/&gt;</text>
                     </svg>
                     </a>
                 </h2>
-                <p style="color: #aaa; font-size: 0.9rem;">Admin Kullanıcı</p>
+                <i class="fas fa-times close-sidebar" id="close-sidebar" style="display:none; color:#fff; font-size:1.5rem; cursor:pointer;"></i>
             </div>
             <ul class="sidebar-menu">
                 <li data-target="manage-posts-section" class="active"><i class="fas fa-list"></i> Mevcut İçerikler</li>
@@ -73,12 +56,15 @@
             <button id="logout-btn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</button>
         </aside>
 
-        <!-- SAĞ İÇERİK ALANI -->
         <main class="main-content">
             
-            <!-- 1. MEVCUT İÇERİKLER SAYFASI -->
+            <div class="mobile-admin-header" style="display: none;">
+                <button id="admin-menu-toggle" style="background:none; border:none; color:#00e5ff; font-size:1.5rem; cursor:pointer;"><i class="fas fa-bars"></i></button>
+                <h3 style="margin:0; color:#e0e0e0;">Kontrol Paneli</h3>
+            </div>
+
             <section id="manage-posts-section" class="content-section active">
-                <h3>Mevcut İçerikler</h3>
+                <h3 class="section-title">Mevcut İçerikler</h3>
                 <div class="table-responsive">
                     <table class="admin-table">
                         <thead>
@@ -90,15 +76,13 @@
                             </tr>
                         </thead>
                         <tbody id="admin-posts-list">
-                            <!-- JS ile içerikler buraya gelecek -->
                         </tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- 2. YENİ İÇERİK EKLE SAYFASI -->
             <section id="add-post-section" class="content-section">
-                <h3>Yeni İçerik Ekle / Düzenle</h3>
+                <h3 class="section-title">Yeni İçerik Ekle / Düzenle</h3>
                 <form id="add-post-form">
                     <div class="form-group">
                         <label for="post-category">Kategori</label>
@@ -123,30 +107,24 @@
                         <label for="post-content">İçerik Metni</label>
                         <textarea id="post-content" rows="6" required></textarea>
                     </div>
-                    <div class="form-actions" style="display: flex; gap: 15px; margin-top: 1rem;">
-                        <button type="submit" class="submit-btn" style="flex: 1;">İçeriği Yayınla</button>
-                        <button type="button" id="cancel-edit-btn" class="submit-btn" style="flex: 1; display: none; background-color: transparent; border-color: #ff3333; color: #ff3333;">Vazgeç</button>
+                    <div class="form-actions" style="display: flex; gap: 15px; margin-top: 1rem; flex-wrap: wrap;">
+                        <button type="submit" class="submit-btn" style="flex: 1; min-width: 120px;">İçeriği Yayınla</button>
+                        <button type="button" id="cancel-edit-btn" class="submit-btn" style="flex: 1; min-width: 120px; display: none; background-color: transparent; border-color: #ff3333; color: #ff3333;">Vazgeç</button>
                     </div>
                 </form>
             </section>
 
-            <!-- 3. MESAJLAR SAYFASI -->
             <section id="messages-section" class="content-section">
-                <h3>Gelen Mesajlar</h3>
+                <h3 class="section-title">Gelen Mesajlar</h3>
                 <div id="admin-messages-list"></div>
-                
-                <!-- Sayfalama (Oklar) -->
                 <div id="msg-pagination" class="pagination-controls" style="display: none;">
                     <button id="prev-msg-btn" class="page-btn" onclick="sayfaDegistir(-1)"><i class="fas fa-chevron-left"></i></button>
                     <span id="msg-page-info" style="color: #00e5ff; font-weight: bold;">1 / 1</span>
                     <button id="next-msg-btn" class="page-btn" onclick="sayfaDegistir(1)"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </section>
-
         </main>
     </div>
-
-    <!-- JavaScript Dosyası -->
     <script src="js/admin.js"></script>
   </body>
 </html>
