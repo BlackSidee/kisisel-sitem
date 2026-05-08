@@ -35,9 +35,9 @@ db.getConnection((err, connection) => {
 });
 
 // Ana Sayfa Test Endpoint'i (Tarayıcıdan sunucuyu test etmek için)
-app.get('/', (req, res) => {
-    res.send('Taha.dev Backend API Sorunsuz Çalışıyor! 🚀');
-});
+// app.get('/', (req, res) => {
+//    res.send('Taha.dev Backend API Sorunsuz Çalışıyor! 🚀');
+// });
 
 // Yüklenen resimleri ön yüzde gösterebilmek için klasörü dışa açıyoruz
 app.use('/uploads', express.static('uploads'));

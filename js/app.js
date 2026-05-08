@@ -25,7 +25,7 @@ async function projeleriGetir() {
     }
 }
 
-// Sayfa yüklendiğinde fonksiyonu çalıştır
+// Sayfa yüklendiğinde fonksiyonu çalıştır.
 projeleriGetir();
 
 // Veritabanından Blogları Çekme ve Ekrana Yazdırma
