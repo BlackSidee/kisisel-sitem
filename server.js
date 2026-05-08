@@ -84,6 +84,14 @@ app.get('/api/bloglar', (req, res) => {
     });
 });
 
+app.get('/admin', (req, res) => {
+    res.sendFile(__dirname + '/admin.html');
+});
+
+app.get('/detay', (req, res) => {
+    res.sendFile(__dirname + '/detay.html');
+});
+
 // --- KULLANICI İŞLEMLERİ ---
 
 // 1. KAYIT OL (Register) Endpoint'i - Sadece 1 kere kendi admin hesabımızı açmak için
