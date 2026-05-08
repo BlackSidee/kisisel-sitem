@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Girişi | TahaDEV</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+    <!-- Admin sayfasına özel CSS -->
+  </head>
+  <body class="admin-body">
+    <!-- Giriş Ekranı (Login) -->
+    <div class="login-container" id="login-section">
+      <div class="login-box">
+        <h2>Admin Paneli</h2>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Kullanıcı Adı</label>
+            <input type="text" id="username" required />
+          </div>
+          <div class="form-group">
+                <label for="password">Şifre</label>
+                <input type="password" id="password" required>
+          </div>
+                
+                <!-- BENİ HATIRLA CHECKBOX'I BURAYA EKLENECEK -->
+            <div class="form-group remember-me-container" style="display: flex; align-items: center; justify-content: flex-start; gap: 10px; margin-bottom: 1.5rem;">
+                <input type="checkbox" id="remember-me" style="width: auto; margin: 0; cursor: pointer;">
+                <label for="remember-me" style="margin: 0; font-size: 0.9rem; color: #aaa; cursor: pointer;">Beni Hatırla</label>
+            </div>
+
+            <button type="submit" class="submit-btn">Giriş Yap</button>
+        </form>
+        <p
+          id="login-message"
+          style="color: #ff3333; margin-top: 1rem; text-align: center"
+        ></p>
+      </div>
+    </div>
+
+    <!-- Admin Kontrol Paneli (Başlangıçta Gizli Olacak) -->
+    <div
+      class="dashboard-container"
+      id="dashboard-section"
+      style="display: none"
+    >
+      <header class="dashboard-header">
+        <h2>Taha.dev | Admin Paneli</h2>
+        <button id="logout-btn" class="logout-btn">Çıkış Yap</button>
+      </header>
+
+      <main class="dashboard-main">
+        <!-- Yeni İçerik Ekleme Formu -->
+        <section class="add-post-section">
+          <h3>Yeni İçerik Ekle</h3>
+          <form id="add-post-form">
+            <div class="form-group">
+              <label for="post-category">Kategori</label>
+              <select id="post-category" required>
+                <option value="1">Projelerim</option>
+                <option value="2">Blog Yazıları</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="post-title">Başlık</label>
+              <input type="text" id="post-title" required />
+            </div>
+            <div class="form-group">
+                <label for="post-image-file">Bilgisayardan Resim Seç</label>
+                <input type="file" id="post-image-file" accept="image/*" style="padding: 0.5rem; background: #121212; color: #e0e0e0; border: 1px solid #333; width: 100%; border-radius: 5px; margin-bottom: 1rem;">
+            </div>
+            <div class="form-group">
+              <label for="post-image">Görsel URL (Link)</label>
+              <input type="text" id="post-image" placeholder="https://..." />
+            </div>
+            <div class="form-group">
+              <label for="post-content">İçerik Metni</label>
+              <textarea id="post-content" rows="6" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">İçeriği Yayınla</button>
+          </form>
+        </section>
+
+        <!-- Mevcut İçerikleri Listeleme Alanı -->
+        <section class="manage-posts-section">
+          <h3>Mevcut İçerikler</h3>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Başlık</th>
+                  <th>Kategori</th>
+                  <th>İşlem</th>
+                </tr>
+              </thead>
+              <tbody id="admin-posts-list">
+                <!-- JS ile içerikler buraya gelecek -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="messages-section">
+          <h3>Gelen Mesajlar</h3>
+          <div id="admin-messages-list" class="messages-container">
+            <!-- Mesajlar buraya gelecek -->
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- JavaScript Dosyası -->
+    <script src="js/admin.js"></script>
+  </body>
+</html>

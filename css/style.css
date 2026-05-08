@@ -1,0 +1,215 @@
+/* Genel Ayarlar ve Sıfırlama */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #121212; /* Derin siyah arka plan */
+    color: #e0e0e0; /* Göz yormayan açık gri metinler */
+    line-height: 1.6;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Üst Menü Tasarımı */
+header {
+    background-color: #1a1a1a;
+    padding: 1.2rem 5%;
+    border-bottom: 1px solid #333; /* Hafif bir ayrım çizgisi */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #00e5ff; /* Dikkat çekici neon mavi vurgu rengi */
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #00e5ff; /* Üzerine gelince neon mavi olsun */
+}
+
+/* Ana İçerik Alanları */
+main {
+    padding: 2rem 5%;
+}
+
+.hero-section {
+    text-align: center;
+    padding: 6rem 0;
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.hero-section h2 {
+    font-size: 1.5rem;
+    color: #a0a0a0;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+}
+
+/* Projeler Kart Yapısı (Grid) */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Yan yana sığdığı kadar diz, sığmazsa alt satıra at */
+    gap: 2rem;
+    margin-top: 2.5rem;
+}
+
+.project-card {
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    padding: 2rem;
+    border-radius: 10px; /* Köşeleri hafif yumuşatılmış kartlar */
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-8px); /* Üzerine gelince kartı hafifçe yukarı kaldır */
+    border-color: #00e5ff; /* Kenarlığı neon mavi yap */
+}
+
+.project-card h3 {
+    margin-bottom: 1rem;
+    color: #ffffff;
+    font-size: 1.4rem;
+}
+
+.project-card a {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: #00e5ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: letter-spacing 0.3s ease;
+}
+
+.project-card a:hover {
+    letter-spacing: 1px; /* Linkin üstüne gelince harf aralığı açılsın */
+}
+
+/* Bölüm Başlıkları (H2) İçin Genel Ayar */
+main h2 {
+    font-size: 2.5rem;
+    color: #ffffff;
+    margin-bottom: 2rem;
+    text-align: center;
+    margin-top: 5rem;
+}
+
+/* İletişim Formu Tasarımı */
+.contact-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #1a1a1a;
+    padding: 2.5rem;
+    border-radius: 10px;
+    border: 1px solid #333;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #a0a0a0;
+}
+
+.form-group input, 
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #121212;
+    border: 1px solid #333;
+    border-radius: 5px;
+    color: #e0e0e0;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    resize: vertical;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+    outline: none;
+    border-color: #00e5ff; /* Tıklanınca neon mavi çerçeve */
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: transparent;
+    color: #00e5ff;
+    border: 2px solid #00e5ff;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #00e5ff;
+    color: #121212; /* Üzerine gelince buton içi dolsun ve yazı siyah olsun */
+}
+
+/* Footer Tasarımı */
+footer {
+    text-align: center;
+    padding: 2rem;
+    background-color: #1a1a1a;
+    border-top: 1px solid #333;
+    margin-top: 4rem;
+}
+
+/* JavaScript ile tetiklenecek Animasyon Sınıfları */
+.hidden {
+    opacity: 0;
+    transform: translateY(50px); /* 50 piksel aşağıdan başlar */
+    transition: all 0.8s ease-out; /* 0.8 saniyede yumuşakça gelir */
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0); /* Orijinal konumuna yerleşir */
+}
+
+/* Scroll yapıldığında menüye eklenecek gölge */
+.scrolled-nav {
+    box-shadow: 0 4px 15px rgba(0, 229, 255, 0.2);
+    background-color: rgba(26, 26, 26, 0.95);
+    backdrop-filter: blur(5px);
+}
