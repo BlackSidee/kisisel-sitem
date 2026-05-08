@@ -14,7 +14,7 @@ async function projeleriGetir() {
                 <article class="project-card">
                     <h3>${proje.title}</h3>
                     <p>${proje.content}</p>
-                    <a href="detay.html?id=${proje.id}">Detayları İncele</a>
+                    <a href="detay?id=${proje.id}">Detayları İncele</a>
                 </article>
             `;
             projeGrid.innerHTML += kartHTML;
@@ -45,7 +45,7 @@ async function bloglariGetir() {
                 <article class="project-card">
                     <h3>${blog.title}</h3>
                     <p>${blog.content}</p>
-                    <a href="detay.html?id=${blog.id}">Okumaya Devam Et</a>
+                    <a href="detay?id=${blog.id}">Okumaya Devam Et</a>
                 </article>
             `;
             blogGrid.innerHTML += kartHTML;
