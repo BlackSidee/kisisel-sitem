@@ -26,18 +26,21 @@ window.onload = async () => {
         const resimEl = document.getElementById('icerik-resim');
         const videoEl = document.getElementById('icerik-video');
 
-        // Eğer veritabanından video linki gelirse videoyu göster, resmi gizle
+        // 1. Adım: Başlangıçta her ikisini de kesin olarak gizle (Temiz sayfa)
+        resimEl.style.display = 'none';
+        if (videoEl) videoEl.style.display = 'none';
+
+        // 2. Adım: Eğer video linki varsa sadece videoyu göster
         if (post.video_url && post.video_url.trim() !== "") {
             videoEl.src = post.video_url;
             videoEl.style.display = 'block';
-            resimEl.style.display = 'none';
         } 
-        // Eğer video yoksa ama resim varsa resmi göster, videoyu gizle
-        else if (post.image_url && post.image_url.trim() !== "") {
+        // 3. Adım: Video yoksa, resim linki varsa VE resim linki "#" DEĞİLSE resmi göster
+        else if (post.image_url && post.image_url.trim() !== "" && post.image_url !== "#") {
             resimEl.src = post.image_url;
             resimEl.style.display = 'block';
-            videoEl.style.display = 'none';
         }
+        // Eğer ikisi de yoksa, 1. adımda gizlediğimiz için ekranda hiçbir boşluk veya kırık ikon kalmaz!
 
         // Admin panelinden girilen metni ekrana bas
         document.getElementById('icerik-metin').textContent = post.content;
