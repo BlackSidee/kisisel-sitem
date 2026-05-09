@@ -184,6 +184,24 @@ app.get('/api/posts/:id', (req, res) => {
     });
 });
 
+// 2. Yeni İçerik Ekleme (POST)
+app.post('/api/posts', (req, res) => {
+    // req.body içinden video_url dahil tüm verileri alıyoruz
+    const { category_id, title, content, image_url, video_url } = req.body; 
+    
+    // SQL sorgusuna video_url'i de ekliyoruz
+    const sql = 'INSERT INTO posts (category_id, title, content, image_url, video_url) VALUES (?, ?, ?, ?, ?)';
+    
+    // Gelen verileri sırasıyla SQL'e gönderiyoruz
+    db.query(sql, [category_id, title, content, image_url, video_url], (err, result) => {
+        if (err) {
+            console.error('Kayıt hatası:', err);
+            return res.status(500).json({ error: 'Ekleme hatası' });
+        }
+        res.json({ message: 'İçerik başarıyla eklendi!' });
+    });
+});
+
 // 3. İçerik Silme (DELETE)
 app.delete('/api/posts/:id', (req, res) => {
     const { id } = req.params;
@@ -198,11 +216,19 @@ app.delete('/api/posts/:id', (req, res) => {
 // 4. İçerik Güncelleme (PUT)
 app.put('/api/posts/:id', (req, res) => {
     const { id } = req.params;
-    const { category_id, title, content, image_url } = req.body;
-    const sql = 'UPDATE posts SET category_id = ?, title = ?, content = ?, image_url = ? WHERE id = ?';
     
-    db.query(sql, [category_id, title, content, image_url, id], (err, result) => {
-        if (err) return res.status(500).json({ error: 'Güncelleme hatası' });
+    // video_url değişkenini de karşılıyoruz
+    const { category_id, title, content, image_url, video_url } = req.body; 
+    
+    // UPDATE sorgusuna video_url = ? ekliyoruz
+    const sql = 'UPDATE posts SET category_id = ?, title = ?, content = ?, image_url = ?, video_url = ? WHERE id = ?';
+    
+    // Diziye video_url ve id'yi sırasıyla ekliyoruz
+    db.query(sql, [category_id, title, content, image_url, video_url, id], (err, result) => {
+        if (err) {
+            console.error('Güncelleme hatası:', err);
+            return res.status(500).json({ error: 'Güncelleme hatası' });
+        }
         res.json({ message: 'İçerik başarıyla güncellendi!' });
     });
 });

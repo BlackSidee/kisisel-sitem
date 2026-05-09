@@ -190,6 +190,7 @@ document.getElementById('add-post-form').onsubmit = async (e) => {
     const category_id = document.getElementById('post-category').value;
     const title = document.getElementById('post-title').value;
     const image_url = document.getElementById('post-image').value || '#';
+    const video_url = document.getElementById('post-video').value || '';
     const content = document.getElementById('post-content').value;
 
     let url = '/api/posts';
@@ -204,7 +205,7 @@ document.getElementById('add-post-form').onsubmit = async (e) => {
         const response = await fetch(url, {
             method: method,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ category_id, title, image_url, content })
+            body: JSON.stringify({ category_id, title, image_url, video_url, content })
         });
 
         if (response.ok) {
