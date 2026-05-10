@@ -48,11 +48,19 @@
                 </h2>
                 <i class="fas fa-times close-sidebar" id="close-sidebar" style="display:none; color:#fff; font-size:1.5rem; cursor:pointer;"></i>
             </div>
-            <div style="background: #121212; border: 1px solid #333; border-radius: 8px; padding: 12px; margin: 15px 20px; text-align: center;">
-                <div style="color: #aaa; font-size: 0.8rem; margin-bottom: 5px;">ANLIK ZİYARETÇİ</div>
+            <div style="display: flex; gap: 15px; margin: 15px 20px;">
+            <div style="flex: 1; background: #121212; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
+                <div style="color: #aaa; font-size: 0.8rem; margin-bottom: 5px;">ANLIK KULLANICI</div>
                 <div style="color: #00e5ff; font-size: 1.5rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                    <i class="fas fa-users"></i> <span id="online-count">0</span>
+                    <i class="fas fa-user-clock"></i> <span id="online-count">0</span>
                 </div>
+            </div>
+            <div style="flex: 1; background: #121212; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
+                <div style="color: #aaa; font-size: 0.8rem; margin-bottom: 5px;">TOPLAM ZİYARETÇİ</div>
+                <div style="color: #00e5ff; font-size: 1.5rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i class="fas fa-globe"></i> <span id="total-count">0</span>
+                </div>
+            </div>
             </div>
             <ul class="sidebar-menu">
                 <li data-target="manage-posts-section" class="active"><i class="fas fa-list"></i> Mevcut İçerikler</li>
@@ -140,6 +148,10 @@
         const socket = io();
         socket.on('ziyaretciGuncelle', (sayi) => {
             document.getElementById('online-count').textContent = sayi;
+        });
+        socket.on('toplamZiyaretciGuncelle', (sayi) => {
+            const totalEl = document.getElementById('total-count');
+            if(totalEl) totalEl.textContent = sayi;
         });
     </script>
     <script src="js/admin.js"></script>

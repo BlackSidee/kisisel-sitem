@@ -263,22 +263,55 @@ app.get('/api/messages', (req, res) => {
     });
 });
 
-// --- GERÇEK ZAMANLI ZİYARETÇİ TAKİBİ ---
-let anlikZiyaretci = 0;
+// --- GERÇEK ZAMANLI & TOPLAM ZİYARETÇİ TAKİBİ ---
+const aktifKullanicilar = new Map(); // IP -> Açık sekme sayısı şeklinde tutacağız
 
 io.on('connection', (socket) => {
-    // Biri siteye girdiğinde sayıyı artır ve herkese duyur
-    anlikZiyaretci++;
-    io.emit('ziyaretciGuncelle', anlikZiyaretci);
+    // Cloudflare veya Nginx arkasındaysan gerçek IP'yi bu başlıklardan alırız
+    const ip = socket.handshake.headers['cf-connecting-ip'] || 
+               socket.handshake.headers['x-forwarded-for'] || 
+               socket.handshake.address;
 
-    // Biri siteden çıktığında sayıyı azalt ve herkese duyur
+    // Kullanıcı ilk defa geliyorsa (Map içinde yoksa)
+    if (!aktifKullanicilar.has(ip)) {
+        aktifKullanicilar.set(ip, 1); // 1. sekmesini açtı
+        
+        // Veritabanına bu IP'yi eklemeyi dene (INSERT IGNORE zaten varsa hata vermeden geçer)
+        db.query('INSERT IGNORE INTO unique_visitors (ip) VALUES (?)', [ip], (err) => {
+            if (!err) {
+                // Toplam tekil ziyaretçi sayısını çek ve admin paneline yolla
+                db.query('SELECT COUNT(*) AS toplam FROM unique_visitors', (err, results) => {
+                    if (!err && results.length > 0) {
+                        io.emit('toplamZiyaretciGuncelle', results[0].toplam);
+                    }
+                });
+            }
+        });
+    } else {
+        // Kullanıcı zaten sitede, sadece yeni bir sekme açtı. Sayısını 1 artırıyoruz.
+        aktifKullanicilar.set(ip, aktifKullanicilar.get(ip) + 1);
+    }
+
+    // Güncel "tekil" aktif kişi sayısını gönder
+    io.emit('ziyaretciGuncelle', aktifKullanicilar.size);
+
     socket.on('disconnect', () => {
-        anlikZiyaretci--;
-        io.emit('ziyaretciGuncelle', anlikZiyaretci);
+        let sekmeSayisi = aktifKullanicilar.get(ip);
+        
+        if (sekmeSayisi > 1) {
+            // Kullanıcı sadece bir sekmeyi kapattı, diğerleri açık
+            aktifKullanicilar.set(ip, sekmeSayisi - 1);
+        } else {
+            // Kullanıcı tüm sekmeleri kapattı, aktif listeden tamamen sil
+            aktifKullanicilar.delete(ip);
+        }
+        
+        // Güncel aktif sayıyı tekrar yolla
+        io.emit('ziyaretciGuncelle', aktifKullanicilar.size);
     });
 });
 
-// Sunucuyu Ayağa Kaldırma (app.listen yerine server.listen kullanıyoruz)
+// Sunucuyu Ayağa Kaldırma
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
     console.log(`🚀 Sunucu çalışıyor: http://localhost:${PORT}`);
