@@ -6,10 +6,15 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
+const http = require('http');
+const { Server } = require("socket.io");
 require('dotenv').config(); // .env dosyasındaki gizli verileri okumak için
 
 // Express uygulamamızı başlatıyoruz
 const app = express();
+
+const server = http.createServer(app);
+const io = new Server(server);
 
 // Middleware (Ara Katman) Ayarları
 app.use(cors()); // Frontend ve Backend farklı portlarda çalışırken hata almamak için
@@ -258,8 +263,23 @@ app.get('/api/messages', (req, res) => {
     });
 });
 
-// Sunucuyu Ayağa Kaldırma
+// --- GERÇEK ZAMANLI ZİYARETÇİ TAKİBİ ---
+let anlikZiyaretci = 0;
+
+io.on('connection', (socket) => {
+    // Biri siteye girdiğinde sayıyı artır ve herkese duyur
+    anlikZiyaretci++;
+    io.emit('ziyaretciGuncelle', anlikZiyaretci);
+
+    // Biri siteden çıktığında sayıyı azalt ve herkese duyur
+    socket.on('disconnect', () => {
+        anlikZiyaretci--;
+        io.emit('ziyaretciGuncelle', anlikZiyaretci);
+    });
+});
+
+// Sunucuyu Ayağa Kaldırma (app.listen yerine server.listen kullanıyoruz)
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`🚀 Sunucu çalışıyor: http://localhost:${PORT}`);
 });
