@@ -1,3 +1,17 @@
+// --- LOADING SCREEN İŞLEMİ ---
+window.addEventListener('load', () => {
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        // Animasyonlu bir şekilde kaybolması için class ekliyoruz
+        loadingScreen.classList.add('fade-out');
+        
+        // Kaybolduktan sonra arkada tıklamaları engellemesin diye yarım saniye sonra tamamen siliyoruz
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500); 
+    }
+});
+
 // Veritabanından Projeleri Çekme ve Ekrana Yazdırma
 async function projeleriGetir() {
     try {

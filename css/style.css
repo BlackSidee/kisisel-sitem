@@ -259,3 +259,47 @@ footer {
         grid-template-columns: 1fr; /* Mobilde kartları alt alta diz */
     }
 }
+
+/* --- LOADING SCREEN --- */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #121212; /* Sitenin karanlık teması */
+    z-index: 99999; /* Her şeyin en üstünde durması için */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Logo ile dönen ikon arasındaki boşluk */
+    transform: translateY(-40px); /* Ekranın ortasının biraz üstünde durması için */
+}
+
+/* Neon Mavi Dönen Yükleme İkonu (Spinner) */
+.spinner {
+    width: 45px;
+    height: 45px;
+    border: 4px solid rgba(0, 229, 255, 0.1); /* Sönük mavi arka plan */
+    border-top: 4px solid #00e5ff; /* Parlak neon mavi çizgi */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Yükleme bittiğinde ekranı yavaşça kaybetmek için */
+.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
