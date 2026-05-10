@@ -14,6 +14,13 @@ window.onload = async () => {
         dashboardSection.style.display = 'flex';
         await icerikleriYukle();
         await mesajlariYukle();
+        
+        // --- YENİ EKLENEN: Sayfa yenilendiğinde eski sekmeyi hatırla ve otomatik aç ---
+        const sonSekme = localStorage.getItem('aktifSekme');
+        if (sonSekme) {
+            const sekmeButonu = document.querySelector(`[data-target="${sonSekme}"]`);
+            if (sekmeButonu) sekmeButonu.click();
+        }
     } else {
         loginSection.style.display = 'flex';
         dashboardSection.style.display = 'none';
@@ -33,6 +40,9 @@ document.querySelectorAll('.sidebar-menu li').forEach(item => {
             sec.classList.remove('active');
             if(sec.id === targetId) sec.classList.add('active');
         });
+        
+        // --- YENİ EKLENEN: Seçilen sekmeyi tarayıcı hafızasına kaydet ---
+        localStorage.setItem('aktifSekme', targetId);
     });
 });
 
@@ -408,4 +418,22 @@ if(timeFilterBtn) {
 const analizMenuBtn = document.querySelector('[data-target="analysis-section"]');
 if(analizMenuBtn) {
     analizMenuBtn.addEventListener('click', () => loadAnalytics());
+}
+
+// --- YENİ EKLENEN: ANALİZ SAYFASI AÇIKKEN GERÇEK ZAMANLI GÜNCELLEME ---
+// admin.html içinde tanımladığımız global 'socket' değişkenini dinliyoruz
+if (typeof socket !== 'undefined') {
+    socket.on('ziyaretciGuncelle', () => {
+        const analizSec = document.getElementById('analysis-section');
+        
+        // Sadece analiz sayfasındaysak arkada gizlice verileri yenile (F5'e gerek kalmadan)
+        if (analizSec && analizSec.classList.contains('active')) {
+            const seciliFiltre = document.getElementById('time-range-filter').value;
+            
+            // Veritabanı kaydının tamamlanması için çok kısa bir süre (500ms) bekleyip yeni verileri çekiyoruz
+            setTimeout(() => {
+                loadAnalytics(seciliFiltre);
+            }, 500); 
+        }
+    });
 }
