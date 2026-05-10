@@ -263,23 +263,31 @@ app.get('/api/messages', (req, res) => {
     });
 });
 
-// --- GERÇEK ZAMANLI & TOPLAM ZİYARETÇİ TAKİBİ ---
+// --- GERÇEK ZAMANLI ZİYARETÇİ TAKİBİ VE ANALİZ ---
 const aktifKullanicilar = new Map(); // IP -> Açık sekme sayısı şeklinde tutacağız
 
 io.on('connection', (socket) => {
-    // Cloudflare veya Nginx arkasındaysan gerçek IP'yi bu başlıklardan alırız
+    // 1. Gerçek IP Adresini Al
     const ip = socket.handshake.headers['cf-connecting-ip'] || 
                socket.handshake.headers['x-forwarded-for'] || 
                socket.handshake.address;
 
-    // Kullanıcı ilk defa geliyorsa (Map içinde yoksa)
+    // --- YENİ: SİTEYE GİRİŞ SÜRESİNİ BAŞLAT ---
+    const startTime = new Date();
+    let sessionId;
+
+    // Oturumu veritabanına kaydet (Kalma süresini hesaplamak için)
+    db.query('INSERT INTO user_sessions (ip_address) VALUES (?)', [ip], (err, result) => {
+        if (!err) sessionId = result.insertId;
+    });
+    // ------------------------------------------
+
+    // 2. Anlık ve Toplam Ziyaretçi Sayacı
     if (!aktifKullanicilar.has(ip)) {
-        aktifKullanicilar.set(ip, 1); // 1. sekmesini açtı
+        aktifKullanicilar.set(ip, 1); 
         
-        // Veritabanına bu IP'yi eklemeyi dene (INSERT IGNORE zaten varsa hata vermeden geçer)
         db.query('INSERT IGNORE INTO unique_visitors (ip) VALUES (?)', [ip], (err) => {
             if (!err) {
-                // Toplam tekil ziyaretçi sayısını çek ve admin paneline yolla
                 db.query('SELECT COUNT(*) AS toplam FROM unique_visitors', (err, results) => {
                     if (!err && results.length > 0) {
                         io.emit('toplamZiyaretciGuncelle', results[0].toplam);
@@ -288,26 +296,59 @@ io.on('connection', (socket) => {
             }
         });
     } else {
-        // Kullanıcı zaten sitede, sadece yeni bir sekme açtı. Sayısını 1 artırıyoruz.
         aktifKullanicilar.set(ip, aktifKullanicilar.get(ip) + 1);
     }
 
-    // Güncel "tekil" aktif kişi sayısını gönder
     io.emit('ziyaretciGuncelle', aktifKullanicilar.size);
 
+    // 3. Kullanıcı Çıkış Yaptığında (Sekmeyi Kapattığında)
     socket.on('disconnect', () => {
+        
+        // --- YENİ: KALMA SÜRESİNİ HESAPLA VE GÜNCELLE ---
+        const endTime = new Date();
+        const durationSeconds = Math.round((endTime - startTime) / 1000);
+
+        if (sessionId) {
+            db.query(
+                'UPDATE user_sessions SET end_time = ?, duration_seconds = ? WHERE id = ?',
+                [endTime, durationSeconds, sessionId]
+            );
+        }
+        // ------------------------------------------------
+
         let sekmeSayisi = aktifKullanicilar.get(ip);
         
         if (sekmeSayisi > 1) {
-            // Kullanıcı sadece bir sekmeyi kapattı, diğerleri açık
             aktifKullanicilar.set(ip, sekmeSayisi - 1);
         } else {
-            // Kullanıcı tüm sekmeleri kapattı, aktif listeden tamamen sil
             aktifKullanicilar.delete(ip);
         }
         
-        // Güncel aktif sayıyı tekrar yolla
         io.emit('ziyaretciGuncelle', aktifKullanicilar.size);
+    });
+});
+
+// --- YENİ EKLENEN: ANALİZ VERİLERİNİ ÇEKME APİ'Sİ ---
+app.get('/api/analytics/summary', (req, res) => {
+    const { range } = req.query; // daily, weekly, monthly
+    let timeFilter = "INTERVAL 1 DAY";
+    if (range === 'weekly') timeFilter = "INTERVAL 7 DAY";
+    if (range === 'monthly') timeFilter = "INTERVAL 30 DAY";
+
+    const sql = `
+        SELECT 
+            COUNT(DISTINCT ip_address) as total_users,
+            AVG(duration_seconds) as avg_duration,
+            DATE(start_time) as date
+        FROM user_sessions 
+        WHERE start_time >= NOW() - ${timeFilter}
+        GROUP BY DATE(start_time)
+        ORDER BY date DESC
+    `;
+    
+    db.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
     });
 });
 

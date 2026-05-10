@@ -349,3 +349,63 @@ if(adminMenuToggle && adminSidebar) {
         });
     });
 }
+
+// --- 9. ANALİZ İŞLEMLERİ ---
+async function loadAnalytics(range = 'daily') {
+    try {
+        const response = await fetch(`/api/analytics/summary?range=${range}`);
+        const data = await response.json();
+        
+        const tableBody = document.getElementById('analysis-table-body');
+        const cardsContainer = document.getElementById('analysis-cards');
+        
+        // Eğer o an sayfada bu elemanlar yoksa hata vermesin
+        if(!tableBody || !cardsContainer) return; 
+
+        tableBody.innerHTML = '';
+        let totalV = 0, totalD = 0;
+
+        // Verileri tabloya döşe ve toplamları hesapla
+        data.forEach(row => {
+            totalV += row.total_users;
+            totalD += row.avg_duration;
+            
+            const tr = `
+                <tr>
+                    <td>${new Date(row.date).toLocaleDateString('tr-TR')}</td>
+                    <td>${row.total_users}</td>
+                    <td>${Math.round(row.avg_duration)} sn</td>
+                </tr>
+            `;
+            tableBody.innerHTML += tr;
+        });
+
+        // Üstteki mavi kutuları (Özet kartlarını) güncelle
+        cardsContainer.innerHTML = `
+            <div style="background: #121212; padding: 20px; border-radius: 10px; border: 1px solid #333; text-align: center;">
+                <div style="color: #aaa; font-size: 0.9rem;">Toplam Tekil Giriş</div>
+                <div style="color: #00e5ff; font-size: 1.8rem; font-weight: bold;">${totalV}</div>
+            </div>
+            <div style="background: #121212; padding: 20px; border-radius: 10px; border: 1px solid #333; text-align: center;">
+                <div style="color: #aaa; font-size: 0.9rem;">Genel Süre Ortalaması</div>
+                <div style="color: #00e5ff; font-size: 1.8rem; font-weight: bold;">${data.length ? Math.round(totalD / data.length) : 0} sn</div>
+            </div>
+        `;
+    } catch (error) {
+        console.error("Analiz verisi çekilemedi:", error);
+    }
+}
+
+// Sağ üstteki filtre değiştiğinde (Son 24 saat, Son 7 Gün vs.) veriyi yenile
+const timeFilterBtn = document.getElementById('time-range-filter');
+if(timeFilterBtn) {
+    timeFilterBtn.addEventListener('change', (e) => {
+        loadAnalytics(e.target.value);
+    });
+}
+
+// Sol menüden "Analiz" butonuna tıklandığında anında verileri çek ve göster
+const analizMenuBtn = document.querySelector('[data-target="analysis-section"]');
+if(analizMenuBtn) {
+    analizMenuBtn.addEventListener('click', () => loadAnalytics());
+}
