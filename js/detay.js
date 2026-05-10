@@ -52,4 +52,13 @@ window.onload = async () => {
         console.error("Veri çekilirken hata oluştu:", error);
         document.getElementById('icerik-baslik').textContent = "Sunucuya bağlanılamadı.";
     }
+
+    // --- VERİLER YÜKLENDİKTEN SONRA LOADING EKRANINI KALDIR ---
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        loadingScreen.classList.add('fade-out');
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
+    }
 };
